@@ -51,6 +51,8 @@ Route::post('addUtilisateur', [UtilisateurController::class, 'createUtilisateur'
 Route::post('auth/register', [UserController::class, 'createUser']);
 
 
+Route::post('/prod/paginer', [ProduitController::class, 'paginer']);
+
 Route::apiResource('/succ', SuccursaleController::class);
 
 Route::apiResource('/prod', ProduitController::class);

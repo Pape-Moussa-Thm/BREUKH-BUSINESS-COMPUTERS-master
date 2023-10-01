@@ -13,6 +13,7 @@ export class ListProduitsComponent {
   links: any
   num: number = 0
   page: number = 4
+  succId: number = 1
 
   ngOnInit()
   {
@@ -23,7 +24,7 @@ export class ListProduitsComponent {
 
   toPaginate(url: string) {
     if (url) {
-      this.prodService.allProduit(url, this.page).subscribe((res: any) => {
+      this.prodService.allProduit(url, this.page).subscribe((res) => {
         this.produits = res.data.produits;
         this.links = res.data.link;
       });
@@ -35,14 +36,14 @@ export class ListProduitsComponent {
   onPerPageChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const selectedValue = parseInt(selectElement.value, 10);
-    this.page = selectedValue;
+    this.page = selectedValue
+    // console.log(this.page);
 
-    this.prodService.allProduit(undefined, this.page).subscribe((res: any) => {
+    this.prodService.allProduit(undefined, this.page).subscribe((res) => {
       this.produits = res.data.produits;
       this.links = res.data.link;
     });
   }
-
 
   allProduit()
   {

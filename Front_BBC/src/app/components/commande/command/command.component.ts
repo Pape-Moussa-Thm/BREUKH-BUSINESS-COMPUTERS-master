@@ -61,17 +61,20 @@ export class CommandComponent {
 
     this.prodService.allUnite().subscribe(res => {
       this.unites = res;
+      //console.log(this.unite);
+
 
       this.prodService.searchPrix(this.reference).subscribe(res => {
         this.produit = res.produit;
         this.display = !!this.produit;
+console.log(this.produit);
 
           if (this.produit) {
             if (!res.amis) {
             this.succ = false;
             this.mein = true;
             this.disabled = false;
-            this.imageSrc = this.produit.photo;
+            this.imageSrc = "http://localhost:8000/storage/"+this.produit.photo;
             this.libelle = this.produit.libelle;
             this.code = this.produit.code;
             this.description = this.produit.caracteristiques[1].pivot.description;

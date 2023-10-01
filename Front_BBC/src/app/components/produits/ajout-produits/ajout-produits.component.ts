@@ -26,7 +26,7 @@ export class AjoutProduitsComponent {
 
   constructor(private fb: FormBuilder, private prodService: ProduitsService, private imageService: ImagesService) {
     this.produitForm = this.fb.group({
-      succursale_id: [],
+      succursale_id: ['1'],
       libelle: [''],
       prix: [''],
       qte: [''],
@@ -113,7 +113,6 @@ export class AjoutProduitsComponent {
       console.log(res);
     })
   }
-
 
 
 }

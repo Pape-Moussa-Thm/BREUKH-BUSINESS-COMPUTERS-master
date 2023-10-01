@@ -14,11 +14,14 @@ use Illuminate\Http\Request;
 use App\Models\Caracteristiques;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ProduitResource;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\ProduitCollection;
 use App\Http\Requests\StoreProduitRequest;
 use App\Http\Resources\SuccursaleResource;
 use App\Http\Requests\UpdateProduitRequest;
+
 
 
 class ProduitController extends Controller
@@ -31,9 +34,13 @@ class ProduitController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function paginer(Request $request)
     {
-        return ProduitResource::collection(Produit::all());
+        // $produits = Produit::paginate(4);
+        // return new ProduitCollection($produits);
+        $produits = Produit::paginate($request->input('per_page'));
+        return new ProduitCollection($produits);
+
     }
 
     /**
@@ -41,8 +48,6 @@ class ProduitController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->authorize('create', Produit::class);
-        // dd(auth()->user()->role);
         try {
             $code = Carbon::now()->format('YmdHis');
 
@@ -64,7 +69,7 @@ class ProduitController extends Controller
                 'categorie_id' => $categorie_id,
                 'marque_id' => $marque_id
             ]);
-            
+
             $prod->succursales()->attach($succ, ['quantite'=>$request->qte, 'prix_unitaire'=>$request->prix]);
 
             $car = $request->caracts;
@@ -83,7 +88,7 @@ class ProduitController extends Controller
             ], 200);
 
         } catch (\Throwable $th) {
-            var_dump($th); 
+            var_dump($th);
             return response()->json(
                 [
                     'status' => false,
@@ -113,12 +118,12 @@ class ProduitController extends Controller
         // return $succ_prod;
 
         $qte = $succ_prod->quantite;
-        
+
         if ($qte != 0) {
             return response()->json([
                 'photo' => $produit->photo,
                 'produit' => new ProduitResource($produit)
-            ]);            
+            ]);
         }
 
         $amis = Succursale::find($succId);
@@ -146,7 +151,7 @@ class ProduitController extends Controller
             }
         }
         //return $ifFriends;
-        
+
         $tab = [];
         foreach ($ifFriends as $id) {
             $succ_prod = SuccProd::where('produit_id', $produit->id)
@@ -170,7 +175,7 @@ class ProduitController extends Controller
             'amis' => $tab,
             'photo' => $produit->photo,
             'produit' => new ProduitResource($produit),
-        ]); 
+        ]);
     }
 
 
